@@ -1,0 +1,63 @@
+
+                     ETHER LANGUAGE (v0.2)
+                    Modular Syntax Reference
+
+
+1. CORE REGISTERS (32-bit)
+----------------------------------------------------------------------
+  EAX : Main register (Function return value)
+  EBX : Secondary register
+  ECX : Counter register
+  EDX : Data register
+
+2. INSTRUCTION SET (Modular Architecture)
+----------------------------------------------------------------------
+  All instructions accept constants or register names as values.
+
+  [ARITHMETIC MODULE]
+    MOV <dest>, <val/reg>  -> Copy value/register into <dest>
+                              Ex: MOV EAX, 10 | MOV EAX, EBX
+
+    ADD <dest>, <val/reg>  -> Add to <dest>
+                              Ex: ADD EAX, 5  | ADD EAX, EBX
+
+    SUB <dest>, <val/reg>  -> Subtract from <dest>
+                              Ex: SUB EAX, 2  | SUB EAX, EBX
+
+    MUL <dest>, <val/reg>  -> Multiply <dest>
+                              Ex: MUL EAX, 3  | MUL EAX, EBX
+
+  [MEMORY MODULE] (RAM Slots 0 to 1023)
+    STORE [<idx>], <reg>   -> Save register value to RAM index
+                              Ex: STORE [0], EAX
+
+    LOAD <reg>, [<idx>]    -> Load RAM value at index into register
+                              Ex: LOAD ECX, [0]
+
+  [EXTENDED / CUSTOM MODULES] (Easy to add via instructionSet)
+    INC <reg>              -> Increment register by 1
+                              Ex: INC EAX
+
+    DEC <reg>              -> Decrement register by 1
+                              Ex: DEC EBX
+
+3. SYNTAX RULES
+----------------------------------------------------------------------
+  * Comments: Use ';' to write comments.
+  * Extensibility: New instructions are registered via key-value
+    handlers in the compiler's instruction table.
+
+======================================================================
+                        MODULAR CODE EXAMPLE
+======================================================================
+
+  ; Core module usage
+  MOV EAX, 50        ; Base price = 50
+  MUL EAX, 3         ; Total = 150
+  STORE [0], EAX     ; Save 150 at RAM[0]
+
+  ; Extension module usage
+  LOAD EBX, [0]      ; Load 150 into EBX
+  SUB EBX, 20        ; Discount = 130
+  MOV EAX, EBX       ; Final result = 130
+
