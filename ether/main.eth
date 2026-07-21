@@ -1,0 +1,7 @@
+
+MOV EAX, 50        
+MUL EAX, 3         
+SUB EAX, 10        
+
+STORE [0], EAX     
+LOAD EBX, [0]      

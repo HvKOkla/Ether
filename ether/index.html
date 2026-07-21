@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Ether Language v0.2</title>
+    <style>
+        body { font-family: monospace; background: #1e1e1e; color: #fff; padding: 20px; }
+        .card { background: #2d2d2d; padding: 20px; border-radius: 8px; max-width: 500px; }
+        button { background: #007acc; color: #fff; border: none; padding: 12px 20px; font-size: 16px; cursor: pointer; border-radius: 4px; }
+        button:hover { background: #005999; }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <h1>🚀 Ether Language v0.2</h1>
+        <p>Test d'un script complet : Calculs + Stockage RAM !</p>
+        <button onclick="testerEther()">Lancer le script .eth</button>
+    </div>
+
+    <script src="compiler.js"></script>
+    <script>
+        function testerEther() {
+            
+            const scriptEther = `
+                ;; 1. Calcul du prix total d'une commande
+                MOV EAX, 50        ; Prix unitaire = 50
+                MUL EAX, 3         ; x 3 articles = 150
+                SUB EAX, 20        ; Réduction de 20 = 130
+
+                ;; 2. Sauvegarde du résultat en RAM à l'adresse 0
+                STORE [0], EAX
+
+                ;; 3. Utilisation d'autres registres et rechargement
+                MOV EBX, 10
+                LOAD ECX, [0]      ; ECX récupère la valeur 130 depuis la RAM
+                
+                ;; 4. Calcul final combiné
+                ADD ECX, EBX       ; ECX = 130 + 10 = 140
+                MOV EAX, ECX       ; EAX prend le résultat final (140)
+            `;
+            
+            compileAndRunEther(scriptEther);
+        }
+    </script>
+</body>
+</html>
