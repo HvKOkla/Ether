@@ -1,63 +1,54 @@
+Spécification Officielle — Ether v0.3
+1. Registres Disponibles
+ACC (Accumulateur) : Stocke le résultat principal et la valeur de retour finale.
 
-                     ETHER LANGUAGE (v0.2)
-                    Modular Syntax Reference
+VAL (Valeur) : Registre secondaire pour les opérations à deux arguments.
 
+CNT (Compteur) : Dédié à la gestion des boucles et indexations.
 
-1. CORE REGISTERS (32-bit)
-----------------------------------------------------------------------
-  EAX : Main register (Function return value)
-  EBX : Secondary register
-  ECX : Counter register
-  EDX : Data register
+TMP (Temporaire) : Registre de travail rapide / jetable.
 
-2. INSTRUCTION SET (Modular Architecture)
-----------------------------------------------------------------------
-  All instructions accept constants or register names as values.
+2. Jeu d'Instructions (Opcodes)
+Mémoire & Registres
+MOV dest, src : Copie la valeur/registre src dans dest.
 
-  [ARITHMETIC MODULE]
-    MOV <dest>, <val/reg>  -> Copy value/register into <dest>
-                              Ex: MOV EAX, 10 | MOV EAX, EBX
+STORE [adresse], reg : Écrit la valeur de reg dans la RAM.
 
-    ADD <dest>, <val/reg>  -> Add to <dest>
-                              Ex: ADD EAX, 5  | ADD EAX, EBX
+LOAD reg, [adresse] : Lit la valeur de la RAM vers reg.
 
-    SUB <dest>, <val/reg>  -> Subtract from <dest>
-                              Ex: SUB EAX, 2  | SUB EAX, EBX
+Arithmétique
+ADD dest, src : Additionne (dest = dest + src).
 
-    MUL <dest>, <val/reg>  -> Multiply <dest>
-                              Ex: MUL EAX, 3  | MUL EAX, EBX
+SUB dest, src : Soustrait (dest = dest - src).
 
-  [MEMORY MODULE] (RAM Slots 0 to 1023)
-    STORE [<idx>], <reg>   -> Save register value to RAM index
-                              Ex: STORE [0], EAX
+MUL dest, src : Multiplie (dest = dest * src).
 
-    LOAD <reg>, [<idx>]    -> Load RAM value at index into register
-                              Ex: LOAD ECX, [0]
+INC reg : Incrémente de 1 (reg++).
 
-  [EXTENDED / CUSTOM MODULES] (Easy to add via instructionSet)
-    INC <reg>              -> Increment register by 1
-                              Ex: INC EAX
+DEC reg : Décrémente de 1 (reg--).
 
-    DEC <reg>              -> Decrement register by 1
-                              Ex: DEC EBX
+Contrôle de Flux (Nouveau v0.3)
+nom_label: : Définit un point de repère dans le code.
 
-3. SYNTAX RULES
-----------------------------------------------------------------------
-  * Comments: Use ';' to write comments.
-  * Extensibility: New instructions are registered via key-value
-    handlers in the compiler's instruction table.
+JMP label : Saut inconditionnel vers le label.
 
-======================================================================
-                        MODULAR CODE EXAMPLE
-======================================================================
+CMP reg, val/reg : Compare deux valeurs et met à jour les drapeaux d'état (flags).
 
-  ; Core module usage
-  MOV EAX, 50        ; Base price = 50
-  MUL EAX, 3         ; Total = 150
-  STORE [0], EAX     ; Save 150 at RAM[0]
+JE label : Saute au label si égalité (==).
 
-  ; Extension module usage
-  LOAD EBX, [0]      ; Load 150 into EBX
-  SUB EBX, 20        ; Discount = 130
-  MOV EAX, EBX       ; Final result = 130
+JNE label : Saute au label si inégalité (!=)
 
+Exemple complet en v0.3:
+Compteur de 0 à 100 par pas de 25 
+
+MOV CNT, 0         ; Initialise le compteur
+MOV ACC, 0         ; Initialise le résultat
+
+boucle_principale:
+ADD ACC, 25        ; Ajoute 25 à ACC
+INC CNT            ; Incrémente le compteur de 1
+
+CMP CNT, 4         ; Vérifie si CNT == 4
+JNE boucle_principale ; Si non, on boucle !
+
+; Fin du programme : ACC vaut 100 !
