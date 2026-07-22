@@ -1,7 +1,11 @@
+   MOV CNT, 0
+MOV ACC, 0
 
-MOV EAX, 50        
-MUL EAX, 3         
-SUB EAX, 10        
+boucle:
+ADD ACC, 10
+INC CNT
 
-STORE [0], EAX     
-LOAD EBX, [0]      
+CMP CNT, 5
+JNE boucle
+
+STORE [0], ACC  
