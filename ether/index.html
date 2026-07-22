@@ -2,46 +2,64 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Ether Language v0.2</title>
+    <title>Ether Language v0.3</title>
     <style>
         body { font-family: monospace; background: #1e1e1e; color: #fff; padding: 20px; }
-        .card { background: #2d2d2d; padding: 20px; border-radius: 8px; max-width: 500px; }
+        .card { background: #2d2d2d; padding: 20px; border-radius: 8px; max-width: 600px; }
         button { background: #007acc; color: #fff; border: none; padding: 12px 20px; font-size: 16px; cursor: pointer; border-radius: 4px; }
         button:hover { background: #005999; }
+        pre { background: #111; padding: 15px; border-radius: 6px; color: #4ec9b0; }
     </style>
 </head>
 <body>
 
     <div class="card">
-        <h1>🚀 Ether Language v0.2</h1>
-        <p>Test d'un script complet : Calculs + Stockage RAM !</p>
-        <button onclick="testerEther()">Lancer le script .eth</button>
+        <h1>Ether Language v0.3</h1>
+        <p></p>
+        <button onclick="testerEther()">Lancer la VM .eth</button>
+
+        <h3>Résultat de la VM :</h3>
+        <pre id="output">Appuie sur le bouton pour exécuter le script...</pre>
     </div>
 
     <script src="compiler.js"></script>
+    <script src="vm.js"></script>
+    
     <script>
         function testerEther() {
             
             const scriptEther = `
-                ;; 1. Calcul du prix total d'une commande
-                MOV EAX, 50        ; Prix unitaire = 50
-                MUL EAX, 3         ; x 3 articles = 150
-                SUB EAX, 20        ; Réduction de 20 = 130
-
-                ;; 2. Sauvegarde du résultat en RAM à l'adresse 0
-                STORE [0], EAX
-
-                ;; 3. Utilisation d'autres registres et rechargement
-                MOV EBX, 10
-                LOAD ECX, [0]      ; ECX récupère la valeur 130 depuis la RAM
                 
-                ;; 4. Calcul final combiné
-                ADD ECX, EBX       ; ECX = 130 + 10 = 140
-                MOV EAX, ECX       ; EAX prend le résultat final (140)
+                MOV CNT, 0        ; Compteur = 0
+                MOV ACC, 0        ; Total = 0
+
+               
+                boucle:
+                ADD ACC, 20       ; Ajoute 20 à ACC à chaque tour
+                INC CNT           ; Incremente CNT de 1
+
+                CMP CNT, 5        ; Est-ce qu'on a fait 5 tours ?
+                JNE boucle        ; Si CNT != 5, on re-boucle !
+
+                
+                STORE [0], ACC
+                
+                
+                LOAD VAL, [0]
+                SUB VAL, 15       ; 100 - 15 = 85
             `;
             
-            compileAndRunEther(scriptEther);
+            
+            const program = compileEther(scriptEther);
+            
+            
+            const vm = new EtherVM();
+            const state = vm.run(program);
+
+            
+            document.getElementById('output').textContent = JSON.stringify(state, null, 2);
         }
     </script>
 </body>
-</html>
+</html>                
+               
