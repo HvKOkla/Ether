@@ -1,0 +1,24 @@
+; Déclarations d'Entête
+EXTERN sys::print
+CONST PAS_ADDITION = 25
+
+;Code Principal
+MOV CNT, 0             ; Initialise le compteur
+MOV ACC, 0             ; Initialise le résultat
+
+boucle_principale:
+    ADD ACC, PAS_ADDITION ; Ajoute 25 à ACC
+    INC CNT                ; Compteur++
+
+    ; Sauvegarde de l'état sur la pile
+    PUSH ACC               ; Empile ACC sur le stack
+    MOV ACC, CNT           ; Met le compteur actuel dans ACC
+    CALL sys::print        ; Affiche l'itération en cours via le système !
+    POP ACC                ; Restaure la valeur de ACC
+
+    CMP CNT, 4             ; Vérifie si CNT == 4
+    JNE boucle_principale  ; Si non, continue la boucle !
+
+; Fin du Programme 
+STORE [0], ACC             ; Sauvegarde le résultat final (100) à l'adresse RAM 0
+PRINT ACC                  ; Affichage final de la valeur 100
