@@ -1,0 +1,19 @@
+{
+  "name": "ether",
+  "version": "1.0.0",
+  "description": "Langage de programmation compilé vers WebAssembly",
+  "main": "compiler.js",
+  "type": "module",
+  "scripts": {
+  "start": "node src/run.js",
+  "build": "node src/compiler.js"
+}
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "binaryen": "^131.0.0"
+  }
+}
